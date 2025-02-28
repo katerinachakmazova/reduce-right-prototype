@@ -110,12 +110,30 @@ function MyArray (...args) {
       }
     return previousValue;
   };
+  this.flat = function(depth = 1) {
+    const result = new MyArray();
+    for(let i = 0; i < this.length; i++) {
+        if(MyArray.isMyArray(this[i])){
+          if(depth > 0){
+            result.concat(this[i].flat(depth - 1));
+          }
+          else{
+            result.push(this[i]);
+          }
+        }
+        else{
+          result.push(this[i]);
+        }
+
+      }
+    return result;
+  };
 }
-const myArr1 = new MyArray(100, 500, 900, 1000);
-const myArr = new MyArray();
-console.log(myArr1.reduceRight((a, b) => a - b, 1000)); 
-console.log(myArr1.reduceRight((a, b) => a + b, 100));
-console.log(myArr1.reduceRight((a, b) => a + b));
-console.log(myArr1.reduceRight((a, b) => a - b));
-// console.log(myArr.reduceRight((a, b) => a - b));
-console.log(myArr.reduceRight((a, b) => a - b, 100));
+
+const array3D = new MyArray(100, new MyArray(200, 300, new MyArray(400, 500, 600)));
+const array4D = new MyArray(100, new MyArray(200, 300, new MyArray(400, 500, 600, new MyArray(700, 800, 900))));
+
+console.log(array3D.flat());
+console.log(array3D.flat(2));
+console.log(array4D.flat(2));
+console.log(array4D.flat(3));
